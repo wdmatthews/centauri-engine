@@ -28,16 +28,22 @@ export default class Circle extends Shape {
   /**
    * Draws the circle.
    * @param {object} camera
+   * @param {object} engine A reference to Centauri.
+   * @param {object} anchor
    */
-  draw(camera) {
+  draw(camera, engine, anchor) {
     const { ctx, bounds: cameraBounds } = camera
-    if (!cameraBounds.overlaps(new RectangleBounds(this.position,
-      new Vector(this.radius * 2, this.radius * 2)))) { return }
+    
+    const worldPosition = Vector.addVectors(this.position, anchor.parentPosition)
+    const isOffCamera = !cameraBounds.overlaps(new RectangleBounds(worldPosition,
+      new Vector(this.radius * 2, this.radius * 2)))
+    if (isOffCamera) { return }
+    
     super.draw(camera, () => {
       ctx.beginPath()
       ctx.arc(0, 0, this.radius, 0, 2 * Math.PI)
       if (this.fillColor !== 'transparent') { ctx.fill() }
       if (this.outlineColor !== 'transparent') { ctx.stroke() }
-    })
+    }, anchor)
   }
 }

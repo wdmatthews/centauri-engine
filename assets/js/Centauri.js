@@ -1,3 +1,4 @@
+import Anchor from './Anchor.js'
 import Camera from './Camera.js'
 import Circle from './Circle.js'
 import Ellipse from './Ellipse.js'
@@ -245,6 +246,7 @@ export class Centauri {
 }
 
 export {
+  Anchor,
   Camera,
   Circle,
   Ellipse,

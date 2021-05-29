@@ -1,3 +1,4 @@
+import Anchor from './Anchor.js'
 import Circle from './Circle.js'
 import Text from './Text.js'
 import Vector from './Vector.js'
@@ -24,6 +25,7 @@ export default class LoadingScreen {
       font: 'bold 32px sans-serif',
       fillColor: 'white',
     })
+    this.anchor = new Anchor()
   }
   
   /**
@@ -37,9 +39,9 @@ export default class LoadingScreen {
     const radius = 384 / 2 * drawingToCanvasUnits
     this.planet.position.set(radius * Math.cos(engine.currentFrame / 100),
       radius * Math.sin(engine.currentFrame / 100))
-    this.star.draw(camera)
-    this.orbit.draw(camera)
-    this.planet.draw(camera)
-    this.loadingText.draw(camera)
+    this.star.draw(camera, engine, this.anchor)
+    this.orbit.draw(camera, engine, this.anchor)
+    this.planet.draw(camera, engine, this.anchor)
+    this.loadingText.draw(camera, engine, this.anchor)
   }
 }

@@ -28,11 +28,16 @@ export default class Square extends Shape {
   /**
    * Draws the square.
    * @param {object} camera
+   * @param {object} engine A reference to Centauri.
+   * @param {object} anchor
    */
-  draw(camera) {
+  draw(camera, engine, anchor) {
     const { ctx, bounds: cameraBounds } = camera
-    if (!cameraBounds.overlaps(new RectangleBounds(this.position,
-      new Vector(this.size, this.size)))) { return }
+    const worldPosition = Vector.addVectors(this.position, anchor.parentPosition)
+    const isOffCamera = !cameraBounds.overlaps(new RectangleBounds(worldPosition,
+      new Vector(this.size, this.size)))
+    if (isOffCamera) { return }
+    
     super.draw(camera, () => {
       if (this.fillColor !== 'transparent') {
         ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
@@ -40,6 +45,6 @@ export default class Square extends Shape {
       if (this.outlineColor !== 'transparent') {
         ctx.strokeRect(-this.size / 2, -this.size / 2, this.size, this.size)
       }
-    })
+    }, anchor)
   }
 }

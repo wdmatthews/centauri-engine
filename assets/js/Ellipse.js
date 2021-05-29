@@ -28,16 +28,21 @@ export default class Ellipse extends Shape {
   /**
    * Draws the ellipse.
    * @param {object} camera
+   * @param {object} engine A reference to Centauri.
+   * @param {object} anchor
    */
-  draw(camera) {
+  draw(camera, engine, anchor) {
     const { ctx, bounds: cameraBounds } = camera
-    if (!cameraBounds.overlaps(new RectangleBounds(this.position,
-      new Vector(this.radius.x * 2, this.radius.y * 2)))) { return }
+    const worldPosition = Vector.addVectors(this.position, anchor.parentPosition)
+    const isOffCamera = !cameraBounds.overlaps(new RectangleBounds(worldPosition,
+      new Vector(this.radius.x * 2, this.radius.y * 2)))
+    if (isOffCamera) { return }
+    
     super.draw(camera, () => {
       ctx.beginPath()
       ctx.ellipse(0, 0, this.radius.x, this.radius.y, 0, 0, 2 * Math.PI)
       if (this.fillColor !== 'transparent') { ctx.fill() }
       if (this.outlineColor !== 'transparent') { ctx.stroke() }
-    })
+    }, anchor)
   }
 }

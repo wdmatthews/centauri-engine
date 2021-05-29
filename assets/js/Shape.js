@@ -32,14 +32,14 @@ export default class Shape extends Renderable {
    * Draws the shape with the given method.
    * @param {object} camera
    * @param {function} drawMethod
+   * @param {object} anchor
    */
-  draw(camera, drawMethod) {
-    const { ctx, position: cameraPosition, canvas, angle: cameraAngle, scale: cameraScale } = camera
+  draw(camera, drawMethod, anchor) {
+    const { ctx } = camera
     ctx.save()
-    ctx.translate(canvas.width / 2 + this.position.x - cameraPosition.x,
-      canvas.height / 2 - this.position.y + cameraPosition.y)
-    ctx.rotate(Math.PI / 180 * (this.angle + cameraAngle))
-    ctx.scale(this.scale.x * cameraScale.x, this.scale.y * cameraScale.y)
+    ctx.translate(anchor.position.x + this.position.x, anchor.position.y - this.position.y)
+    ctx.rotate(Math.PI / 180 * (-this.angle + anchor.angle))
+    ctx.scale(this.scale.x * anchor.scale.x, this.scale.y * anchor.scale.y)
     ctx.fillStyle = this.fillColor
     ctx.strokeStyle = this.outlineColor
     ctx.lineWidth = this.outlineWidth

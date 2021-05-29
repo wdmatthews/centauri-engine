@@ -30,8 +30,9 @@ export default class Graphic extends Shape {
    * Draws the graphic.
    * @param {object} camera
    * @param {object} engine A reference to Centauri.
+   * @param {object} anchor
    */
-  draw(camera, engine) {
+  draw(camera, engine, anchor) {
     const { ctx, bounds: cameraBounds } = camera
     const image = engine.images[this.imageAlias]
     
@@ -47,9 +48,12 @@ export default class Graphic extends Shape {
       this.size = new Vector(this.size.x, this.size.x / this.aspectRatio)
     }
     
-    if (!cameraBounds.overlaps(new RectangleBounds(this.position, this.size))) { return }
+    const worldPosition = Vector.addVectors(this.position, anchor.parentPosition)
+    const isOffCamera = !cameraBounds.overlaps(new RectangleBounds(worldPosition, this.size))
+    if (isOffCamera) { return }
+    
     super.draw(camera, () => {
       ctx.drawImage(image, -this.size.x / 2, -this.size.y / 2, this.size.x, this.size.y)
-    })
+    }, anchor)
   }
 }

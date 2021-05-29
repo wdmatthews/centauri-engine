@@ -1,3 +1,4 @@
+import Anchor from './Anchor.js'
 import RectangleBounds from './RectangleBounds.js'
 import Vector from './Vector.js'
 
@@ -34,7 +35,10 @@ export default class Camera {
    * @param {object} engine A reference to Centauri.
    */
   render(engine) {
+    this.bounds = new RectangleBounds(this.position, new Vector(this.canvas.width, this.canvas.height))
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.renderables?.forEach(renderable => renderable.draw(this, engine))
+    const anchor = new Anchor(this.position, new Vector(this.canvas.width / 2 - this.position.x,
+      this.canvas.height / 2 + this.position.y), this.angle, this.scale)
+    this.renderables?.forEach(renderable => renderable.draw(this, engine, anchor))
   }
 }
